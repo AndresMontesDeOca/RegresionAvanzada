@@ -1,0 +1,147 @@
+Clase #1 SLT:
+Stestatistical Learning Theory (SLT): Inferencia Inductiva y Habilidad de Generalizacion
+Garantias de Performance
+DataSet de Origen de cualquier Distribucion, 
+Los Algoritmos son Funciones en el fondo
+Funcion (G) Existe pero yo la desconzoco | Encontrar una Funcion (F), que aproxime a G (hay miles)
+Funcion de Perdida (L): Es la F, que mejor estima la G. Funcion de relacion entre lo verdadero, y lo estimado
+Riesgo Empirico: **** Error de Entrenamiento??? No puedo confiar en el
+Con ML, la Formula no es la misma. 
+Regresion Lineal: Poco robusta, la vida no es lineal. Poco sezgo, y mucha varianza; sencilla de explicar(sube), pero poca precision
+El error de entrenamiento, lo voy a repetir en validacion
+Red Neuronal (millones de funciones), Random Forest (rapido, poco sofisticado)
+Complejidad del Modelo(38)
+Coeficiente Shattering: 2 a la n
+La Dimension de VC:
+Practica (1:56) Weight of Evidence
+https://colab.research.google.com/drive/1QqtjcfF6qvcN_7Wsf5x4iR8LS8FG-dU7#scrollTo=UgD9yBGBIxM-
+
+Clase #2 SVM:
+Semi Parametrico: Tiene Parametros, pero tambien depende mucho de los datos
+Modelos No-Parametricos -> No tienen Forma Funcional
+Regularizacion -> No solo minimiza el error, sino tambien  la complejidad
+Margen -> Espacio entre Hiperplano y los puntos mas cercanos (vectores de soporte?)
+Minimizando el Modulo del Hiperplano (maximo margen)
+La idea es encontrar un hiperplano que mejore la distancia de los márgenes para que cuando se quiera clasificar datos nuevamente los mismos exista el menor error posible.
+*Lineal: Hallar hiperplanos clasificadores sobre conjunto de datos linealmente separables
+ "Con Algebra basica, donde se ubican vectores y filas, se construye SVM'
+ Maximo el Margen entre Clase + y Clase -
+ Para ello hay que Minimizar el modulo de W (hiperplano que separa), pero con la cond de que no haya puntos entre H1 y H2
+ "SVM (version Linealmente Separale) encuentra un W, que pase por el medio de los dso mundos, y lo haga de maximo margen"
+ Vectores Soporte -> Marcan la Frontera
+ *SVM No Lineal -> Transformar X hacia espacio vectorial mas alta dimension, para tornarlo separables (Input vs Feature Space)
+ Kernel Trick -> Permite transformar el problema Linealmente Separable en cualquier modelo No Linealmente Separabale. Agrandar para Separar
+ Kernels Types: Radial Basis (mas conocido), Polynomial, Linear, Exponential RBF
+* SVM con Imperfecta Separacion -> Penalizamos los puntos que se encuentren dentro de la frontera (error de clasificacion), extra parametro C
+ Hyper-Parametro C: Mas chico el C, mas error permite. Se cmobina con el Hyper W
+ Todos los algoritmos en el fondo, ajustas funciones, hacen un fiting. 
+ SVM como Regresion (SVR): Tubo de Sensibilidad (epsilon, mas finito, mas exigente)
+ Todos los Vectores, adentro del tubo. Los de Soporte en el borde del Tubo, y afuera los que no puedo clasificar
+Voted Perceptron (otro modelo)
+02. Support Vector Machines
+https://colab.research.google.com/drive/1Av1mdNJX9AeNdU-oBFsJTDS2PHFf4NbB#scrollTo=Oo9BBMxoN0Pv
+
+
+Clase #3 Algoritmos Genticos: Encuentras los Optimos Globales con gran eficiencia
+Metodos Evolutivos -> Para optimizar procesos. En el fondo, imitan a la ciencia
+Tipos de Optimizacion: Ensayo y Error vs Conocer el Comportamiento de la Funcion (cantidad y tipo de variables, restricciones, entre otros)
+	- Analitica:  Uso Calculo | Metodo Gradiente no Analiico |
+	- Darwin: Sobrebiven los mas fuertes (la teoria de la evolucion del mosquito)
+Individuo o Genotipo -> Humano 23 pares Cromosomas -> Cada Cromosoma como Vector de Genes
+*Tradeoff entre Explotar y Explorar. El AG hace ambos al mismo tiempo. Como?
+Cotas de los Cromosomas (0, 1) -> [-1, 2]  | X' = -1 + 3 (largo intervalo y ponderacion)* Gx/GMax --> Normalizacion y Explotacion.
+Para poder explorar, hay que hacer Operadores Geneticos: Mutacion (altera uno o mas genes)| Crossover (padre y madre generan intercambio genetico, Blending)
+Hacer varias generaciones
+2:05 Practica
+08. Algoritmos Geneticos
+https://colab.research.google.com/drive/1X17-LxmgiIZVKAiyNQtTTLXYkoPWdKPc
+
+
+Clase #04: Ensamble Methods -> Ensamblar Muchos Algoritmos, como un Comite/Votacion
+2 Condiciones: Devil/Diverso (cambio de datos me cambia el resultado, no robusto) | Clasificadores Exactos (tasa de error menor al 50%)
+Se perturba el Training, para que cada Dataset sea un poco distinto al otro (bagging con repeticion y reemplazo) Bootstrap? Cada abrol tiene un peso determinado
+Dos familias de Emsambles: Gradiente Boosting (AdaBoost)| Random Forest
+3 Bases del AdaBoost: 1) Combina muchos Stumps -> 2) Cada Stump tiene su propio peso (Amount of Say) -> 3) Cada Stump se crea teniendo en cuenta los errors de clasificaicon del Stump anterior (Sample Weight)
+AdaBoost: Aumenta la ponderacion de los registros erroneamente clasificados en la primer iteracion, para que sean seleccionados por la siguiente. MSE, pero si gradiente
+Al principio, cada registro tiene el mismo peso (Sample Weight: 1/n). Calculo que varibale me clasifica mejor (primer stump). Valor del stump entre 0 (clasifica todos bien) y 1 (clasifica todos mal)
+Formula Amount of Say: 0.5 * Log(np.divide(1-Error, Error)) -> New Sample Weight: Old Sample Weight * e**(+/-Amount of Say) -> Se normaliza el New Sample Weight y se genera el nuevo dataset para el proximo stump
+Se suman los pesos del Amount of Say de cada calsificacion, y se clasifica como el que suma mas
+Cada iteracion cada arbol se especializa en un sector distinto del dataset. Forest de Stumps (one node and two leaves), algunos tienen mas peso en la votacion que otros
+Gradiente Boosting:? En el segunda arbol, cambia el Target por el Gradiente (que seria el error). Ya con el gradiente, calculo el alpha (que minimza la funcion). En que direccion la funcion avanza
+Gradiente Boosting: Genera el primer arbol con su residuo. Luego va iterando sumando ese residuo, generando un nuevo arbol con residuo mas chicos. Y asi sucecivamente
+Residuo = Yreal-Yestimado -> 
+AdaBoost: Cambia el peso de cada observacion para aumentar la probabilidad de seleccionar observaciones mal calsificadas para mi proxima iteracion
+Gradiente Boosting: Calcula el residuo de cada abrol, el cual es sumado al proximo arbol, y asi sucesivamente hasta llegar a encontrar un residuo cercano a 0
+Random Forest: Reemplzao de filas con reemplazo, pero tambien subsamplea al azar, por cada nodo, disitintas variables. Poco overfiting,y cada arbol crece sin medida. Gana la mayoria
+	Out of Bag: Filas no usadas, se usan para testear el error
+XGBoost
+1:47 Practica
+03.  Gradient Boosting
+https://colab.research.google.com/drive/1zgpF8_ztEYRJQOPIqu7iKIiLhzVGYc6B
+
+Donde esta 0.4 Bagging?
+
+
+
+Clase #5 Redes Neuronales
+Perceptron (una neurona sola)es la base de todo esto: Input (Rn)->Se combina linealmente con los Weight->Se agrega Sezgo->Se suma->Mayor 0==POS | Menor 0==NEG
+Neurona utiliza todos los Inputs para realizar un suma ponderada de ellos, la ponderacion viene dada por el peso de cada una de las conexiones de entrada
+Cada Input, tendra asociado un valor (w) para definir con que intensidad cada input afecta a la neurona. Estos w son los parametros de nuestros modelos, y son los que debemos ajustar/encontrar
+Con un solo Perceptron, solo podre clasificar problemas que sean linealmente separables. P/modelos mas complejos, tengo qeu anidarlos
+Funcion de Activacion: Distorcionar el Output anadiendo deformaciones no lienales. Para poder encadenar la computacion de varias neuronas.
+Multilayer Perceptron: Se agrega una Funcion de Activacion (Escalonada(umbral), Sigmoideal(0, 1), TanHiper(-1, 1), RELU(constante, lineal) ->Output*W ->N(escalar)
+Cada fila es ua acumulaciond e funciones compuestas, que me termnan dando un escalar. La simple linealidad, se transforma en algo super no-lineal
+Objetivo: Encontrar Ws que cuando interaccionan con el dataset, me genere una Funcion que me genere que cada fila sea lo mas parecida al Target
+Batch vs Online
+Backpropagation: Para cada unidad de Output, calculo su error. Con ese Error, lo propago para atras, cambiando el W. La neurona aprende por si sola
+El error de las capas anterior, depende del error de las posteriores.
+Reparto de la responsabilidad del erorr de cada neurona, pero yendo hacia atras de maneria rescursiva.
+Con esos errores se calculan las derivadas parciales de cada w de la red, conformando el vector gradiente
+Momentum: Me fijo en los dos ultimos Gradientes, y hago un paso intermedio para ir con mas prudencia
+Weight Decay: Regularizacion alpha
+Radial Basis: No entendi
+
+https://colab.research.google.com/drive/1yW4kc2yAWRroTE-6yUH8uXqzDvOCGE36?usp=sharing
+
+Clase #6 Redes Convolusionales -> Tipo de Red Neurnal aplicar un tipo de capa, donde se realiza una operacion matematica llamada Convolusion. 
+Depende de la configuraicion de los parametros de los filtros
+Esta operacion de convolusion sobre una imagen, pueden detectar patrones diferentes segun los valores del filtro definido. Los valores de w que la RN aprendera
+La salida de una capa, es la entrada de la otra
+Embudo convolusiona donde la imagen inicial se va comprimiendo(reduce resolucion), al mismo tiempo que su grosor va aumentando (mas mapas de caracteristicas) -> Input para Red Neuronal Multicapa
+Autoencoder: Compresion
+Convulision: Especie de suavicacion o resumen
+COmputer Vision(47)
+Padding y Stride?
+Convolution, Pooling, Fully Connected
+Poiling +(1:12)
+Redes Convulsionales: Entra una imagen, se le aplica un filtro, un pool max, otro filtro, otro pool max, y te hace un Output. Y esto luego entra a un Mulitayer perceptron --> Deep Learning
+Le agreggo capas para qeu cada una se concentre en un aspecto de la imagen. Com una multilayer no podria. Todo esto es para que te ahorres un monton de Ws
+Redes Recurrentes: Con secuencia, importa el orden (precio stocks). Uso la misma variable que predigo (la version lagueada), como variable explicativa
+Practica (2:01)
+https://colab.research.google.com/drive/1tgUc2WfuPo-JEDig0xPbX2zSixt4cE5I#scrollTo=j0r4muXdKgT_
+
+
+Clase #7 Redes Neurnoales Recurrentes: Son capaces de procesar diferentes tipo de secuencia como texto, conversaciones, videos, musica. 
+Soportan tipo de datos de tamano variable, datos correlacionados (la siguiente imagen, depende de la anterior)
+Las RNN, pueden procesar a la entrada o salida secuencias, sin importar su tamano, y teniendo en cuenta la correlacion existente entre todos los elemenots
+Activacion/Estado Olculto/Feedback Loops? -> Memoria de la Red Recurrente
+No solo e usa el input, sino tambien la activacion
+Proceso Autoregresivo -> Dependen del Input Pasado (efecto lag), concepto de Secuencia. Lo que sucede tene l Target T, depende de lo que sucede en los Target anteriores
+Cuando usas las variables endogenas retrasadas, se llaman Modelos Autoregresivos. Ya que autoregresan a si mismo. Como Input tambein tiene el Hiden de la anterior
+Capturar la idea de que la informacion pasada me esta diciendo algo, hay memoria en el proceso
+Minibatch -> Toma x cantidad de registros, y las entrega todas juntas a la red
+Los W y B son todos los mismos, no cambiando. No aumenta la cantidad de parametros que tenemos para entrenar,pero igualmente se hace mas dificl de entrenar, mas pasos (The Vanishing/Exploding Gradient Problem)
+LSTM -> Subtipo de RNN que permite a NR de acordarse de la iformacion importante, pero permite olvidarse de la no aplicable. Usa Sigmoid y Tanh como Actv Functions
+LSTM -> Picardia para recordar las cosas de manera diferente
+Usa dos path distintos para las prediccions: Uno oara Long(combina todos los del pasado juntos), otro para Short (solo el de ayer)
+Cell State (Long) -> No hay W ni B, se modifica por multiplicaciones y sumas. Esto es lo que evita que el gradiente explote/vanish
+Hidden State (Short) -> Conectadas a W y B como siempre
+Forget Gate (1st stage) -> Determina qeu porcentaje de Long sera recordada p/proxima
+Input Gate (2nd stage) -> 
+Output Gate ()
+T-SNE -> Agrupa todo en 1D Random, then a cada paso un punto es atraido por sus pares de la dimension mayor, pero repelido por los otros. Se repite el proceso
+Perplexity paramenter -> Related to Density, that's why we need a scaled similarity score. Parecido a la Matrix de Correlacion
+Varclus
+https://colab.research.google.com/drive/1ITsvQXiu0S2d9YA8d0nUjZZZAIwjWrU4#scrollTo=50SnzIVMuZc5
+
+

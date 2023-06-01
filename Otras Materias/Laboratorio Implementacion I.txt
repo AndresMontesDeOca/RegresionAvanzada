@@ -1,0 +1,59 @@
+1) Transformacion del Dataset:
+	- Catastrophe Analysis -> Campos Danados
+	- Data Drifting -> Distribuciones cambian entre periodos (Normalizacion, Rankings)
+	- Feature Engineering Intra-Mes -> Entender signos vitales, creando nuevas variables. Manual, Auto, Canaritos Asesinos
+	- Feature Engineering Historico -> Creacion Variables Lag y DeltaLag(tendencia). Construir la Historia del Cliente
+	- Output -> Dataset mas grande y mas robusto
+
+2) Entrenamiento:
+	- Training Strategy -> Que estrategia de entrenamiento? 5cv? que meses entreno? (pandemia?)
+		Train -> Validate -> Test -> Final Train
+		Undersampling clase mayoritaria para acelear Train? O esto me bajara la performance del modelo final?
+	- Hyperparameter Tuning -> Optimizacion Bayesiana, mucho tiempo. Hiper fijos vs variables
+		Si cambio el Dataset, necesito correr otra OB. 
+		Si los valores optimos son cercanos a alguna cota de los HP, amplio al cota y vuelvo a correr 
+	- Output -> Meses usados para entrenar e Hiperparametros Optimos
+	
+3) Generacion Modelos Finales:
+	- Final Models -> Semillerio (Cambio semillas) | Hibridacion de Semillerios (ensamble de varios modelos tipo Semillerio)
+	- Scoring -> Asignacion de probabilidad/score a los registros nuevos del dataset
+	- Output -> Numeros Cliente con sus Scoring
+
+4) Eleccion de Punto de Corte:
+	- Cutting Point -> Punto de Corte (analsis bajas de cada mes, cant optima de estimulos enviados)
+	- Kaggle -> Hackeo de Kaggle. Un valle en el Publico implica un pico en el Privado
+	- Output -> Clasificacion de cada Cliente, si se le envia estimulo o no
+
+
+gsutil -m cp -r "gs://amontesdeoca1982/exp/ZZ6921_W_1on" C:\Temp\Kaggle
+gsutil -m cp -r "gs://amontesdeoca1982/exp/HB8011" C:\Temp\Semillero
+
+
+
+
+
+
+ 
+DF Original -> 155 Variables, 4.9kk Registros
+CA_MachineLearning (CA6110) -> 154 Variables, 4.9kk Registros (que variable pierde? tmobile_app)
+DR_RankCeroFijo (DR6210) (intrames  <- TRUE ) -> Se reemplazan las mismas 73 variables por ranking, y se agregan otras 45 de Intra-Mes (199 totales)
+Cant variables por canaritos:
+	0   -> 1452
+	0.1 -> 256 (253)
+	0.2 -> 498 (232)
+	0.3 -> 502 (378)
+	0.4 -> 460 (348)
+	0.5 -> 542 (359)
+	0.6 -> 565 (407)
+	0.7 -> 478 (381)
+	0.8 -> 530 (363)
+	0.9 -> 542 (409)
+	1   -> 502 (385)
+	1.5 -> 487 (363)
+	2   -> 692 (433)
+
+ZZ7992_NW_T2c, ZZ7992_NW_T2b, ZZ7992_NW_T2d, ZZ7992_NW_T2
+
+Buenas Juan, como quedamos en la ultima reunion, te estoy enviando el video comentando lo que mejor funciono, y lo que no tanto, en el modelo de Attrition  de Clientes
+Siguiendo la filosofia de la empresa, no quise reinventar la rueda, en muchos temas me guie por los experimentos ya realizados por otros colegas previamente, los cuales estan en el repositorico historico
+
