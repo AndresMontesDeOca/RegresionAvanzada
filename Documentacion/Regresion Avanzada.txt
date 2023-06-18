@@ -1,0 +1,72 @@
+Clase #1 -> 
+Asociacion Lineal:
+Usar una variable que esta facilmente accesible, para detectar otra que no lo es
+Coeficiente de Correlacion de Pearson
+Supuesto Poblacional para Validez Estadistica: Ambas variables X, Y tienen distribucion conjunta Normal Bivariada. No alcanza con que ambas sean Normales Univariadas
+Test Henze-Zirkler -> Valida si el Test de Correlacion de Pearson es aplicable -> pg.multivariate_normality(data)
+Test de Pearson -> Implica que ambas variables comparten variablidad, no causalidad -> pg.corr(x, y,'pearson') (ojo, test a dos colas, H0 que no hay relacion)
+Relacion no Lineal -> Hay que transformar una de las dos variables
+Test de Spearman -> Cuando no Perason, esta es la alternativa. Ordena las variables
+Regresion Lineal -> Regression searches for relationships among variables
+Con error (variables que no se pueden ponderar en ninguna x)
+Supuestos del ML: Errores Independientes, de Dist Normal con Media 0, y Homocedasticos (Var constante)
+3 Parametros: Alpha -> Ordenada al Origen | Beta -> Pendiente de la Recta | Sig2 -> Varianza de los Errores
+Uso el Residuo, el Error es como algo teorico, no lo tengo. Los Residuos no tienen las mismas propiedades que los Errores
+Estimacion Coeficientes del Modelo -> Minimizar la suma del Cuadrados de los Residuios. Ordinary Least Squares (OLS)
+Suma de Cuadrados Residuales (SCR, SSE) -> Distancias verticales a la Y estimada
+Maxima Verosimilitud? El valor que puedo estimar mas probable de Alpha y Beta, dado la muestra que encontre
+Test de Wald -> Mide si la Variable X es lo suficientemente significativa como para explicar la Y. El error de Y explicado por X (modelo lineal), es menor que el promedio de Y (linea horizontal)
+	H0 -> Beta Coef = 0 | X no me aporta informacion. Usar la estimacion de X o el promedio de Y, es practicamente lo mismo.
+	Si el IC no incluye al cero(es Positivo o Negativo), el coeficiente es significativo
+Coeficiente de Determinacion R2(Messi?): Indic la proporcion de la variabilidad que logra ser explicada por la recta de la regresion.  1 - (SCR/SCT)
+Suma de Cuadrados Totales (SCT, TSS) -> Distancias verticales a al promedio de Y
+R2 no es una buena medida de ajuste: Mas variables mejora el score (overfiting), Tampoco determina el sezgo de las estimaciones. Ejemplo Cuarteto de Anscombe (mirar Scatterplot)
+R2 Ajustado: Penaliza la incorporacion desmedida de vairables, teniendo en cuenta la cantidad de observaciones (n), y la cantidad de variables predictoras (k)
+ANOVA igual al Test de Wald en Regresion Lineal Simple?
+Bandas de Confianza (donde estan los valores esperados) y Bandas de Prediccion (donde esta cualquier otro valor)
+Modelos Lineales (2:28)
+
+Assumptions of Linear Regression:
+	
+	- Linearity -> Relationship between independent var (x) and depedent var (y) is linear
+		* sns.scatterplot(data, x, y)
+		* Transformmations for making relationships linear. Polynomial or Exponential for any of both
+		
+	- Variables Independence (Multicollinearity) -> Eeach independent variable should be independent from other independent variables
+		* sns.heatmap(data.corr(), vmin=-1, vmax=1, cmap='RdYlGn')
+		* pg.corr(x, y, method='pearson') # spearman and kendall also available, por rangos
+		
+	- Bi-Variate Normality -> Multivariate Normality in Variables
+		* pg.multivariate_normality(data) # Henze-Zirkler Test, Multivariable
+		* st.shapiro(x) # Test single Variable
+		* pg.normality(x) #Test sinlge Variable
+
+	- Residuals Normality With 0 Mean -> Model residuals should follow a normal distribution, with 0 as mean
+		* st.probplot(model.resid, plot=plt) (QQ Plot, Durbin-Watson Test)
+		* If distribution is not normal, regression results will be biased and it may highlight that there are outliers or other assumptions being violated
+		
+	- Residuals Variance (Homosedasticity) - > The variance of residual is the same for any value of x
+		* sns.residplot(resid = ytest - ypred, ypred)
+		* pg.homosedasticity(data)
+
+Metrics for Linear Regresion:
+RMSE (Root Mean Squared Error) -> Distance on average of a data point from the fitted line, measured along a vertical line
+
+
+Clase #2 -> Analisis de Diagnostico: Validacion de los supuestos del modelo mirando los residuos, para detectar subconjunto de valores atipicos. Permite hacer inferencias
+Matriz Hat
+QQ Plot -> Compara los Quantiles Teoricos con los Empiricos
+Variables Independientes (test Durbin-Watson) -> No Correlacionados y NORMALES -> Scatterplot (x=orden, y=resid)
+Outlier(Bonferroni Test): esta alejado pero mantiene la estructura de la recta de regreion | Influtyente puede estar cerca, pero modifica la estructura
+Los Outliers no necesarariamente son valores influyentes, y tampoco viceversa.
+Leverage (hatvalues)-> Cuanto contribuye una observacion en la Suma de Cuadrados de la Var Independiente. Treshold Leverage > 2*p(coef del modelo)/n
+Distancia de Cook, DFFITS, DFBETA
+El modelo solo puede usarse teniendo en consideracion las limitaciones del dominio de las variables con el que fue construido
+Box & Cox Transofrmations(de Potencia): Proposito de lograr Normalidad en la distribucion de los Errores, se transforma la Varuable Respuesta. Se pierde simplicidad de interprestacion del modelo
+Cuadrados Minimos Ponderados (WLS): Las Obs tienen diferente pesos en la importancia del modelo, para poder asi achicar los residuos y disminuor la Heterosedasticidad
+Ventajas: Aplicable para residuos Heterosedasticos | Desventajas: Cuidadosa estimacion de los pesos, muy sensible a Outliers
+Modelos Robustos: Integran los Outliers al tratamiento reduciendo su impacto, en lugar de eliminarlos por completo
+Cuando los errores no son Normales y las Trans Box & Cox no ayudan -> Modelos Robustos o Supresion de Outliers (no recomendado)
+M-estimador de Huber: Menos peso a los Outliers, para reducir el impacto de los residuos grandes (funcion Ro)
+Rousseeuw (Least Trim Squared, LTS): Valor constante de 0 luego de cierto umbral de residuos
+Suma Valores Absolutos de los Residuos (LAD): Modulo
