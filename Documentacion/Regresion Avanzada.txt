@@ -55,12 +55,14 @@ RMSE (Root Mean Squared Error) -> Distance on average of a data point from the f
 
 Clase #2 -> Analisis de Diagnostico: Validacion de los supuestos del modelo mirando los residuos, para detectar subconjunto de valores atipicos. Permite hacer inferencias
 Matriz Hat
-QQ Plot -> Compara los Quantiles Teoricos con los Empiricos
+QQ Plot -> Compara los Quantiles Teoricos con los Empiricos (Observaciones que romperian el supuesto de Normalidad)
 Variables Independientes (test Durbin-Watson) -> No Correlacionados y NORMALES -> Scatterplot (x=orden, y=resid)
 Outlier(Bonferroni Test): esta alejado pero mantiene la estructura de la recta de regreion | Influtyente puede estar cerca, pero modifica la estructura
 Los Outliers no necesarariamente son valores influyentes, y tampoco viceversa.
-Leverage (hatvalues)-> Cuanto contribuye una observacion en la Suma de Cuadrados de la Var Independiente. Treshold Leverage > 2*p(coef del modelo)/n
-Distancia de Cook, DFFITS, DFBETA
+Leverage (hatvalues)-> Cuanto infuencia el vector de Betas. Treshold Leverage > 3*p(coefs del modelo)/n. Suma de Leverages = p
+Distancia de Cook: Medida de influencia de una observacion, que combina tanto su leverage como la magnitud del residuo
+DFFITS: Que tan influyente es la observacion i, para estimarse a si misma
+DFBETA: Evalua la importancia de la i, para la estimacion del vector de coeficientes. Si es alta, cambia el vector de parametros estimado
 El modelo solo puede usarse teniendo en consideracion las limitaciones del dominio de las variables con el que fue construido
 Box & Cox Transofrmations(de Potencia): Proposito de lograr Normalidad en la distribucion de los Errores, se transforma la Varuable Respuesta. Se pierde simplicidad de interprestacion del modelo
 Cuadrados Minimos Ponderados (WLS): Las Obs tienen diferente pesos en la importancia del modelo, para poder asi achicar los residuos y disminuor la Heterosedasticidad
